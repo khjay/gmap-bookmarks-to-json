@@ -48,4 +48,4 @@ for tag in page.xpath('//dt/a'):
 
     doc_ref.document(cid).set(restaurant)
 
-print (json.dumps(restaurants, ensure_ascii=False))
+print (json.dumps(restaurants, ensure_ascii=False, indent=4))
