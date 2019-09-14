@@ -23,6 +23,14 @@ $ pipenv shell
 $ python main.py ~/GoogleBookmarks.html
 ```
 
+---
+
+If you want to disable sync restaurant to firecloud, try the following command:
+
+``` bash
+$ python main.py ~/GoogleBookmarks.html --disable_db
+```
+
 ## Json Format
 
 ```
