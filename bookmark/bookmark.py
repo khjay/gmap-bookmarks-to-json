@@ -55,6 +55,8 @@ class Bookmark:
 
         doc_ref = self.db_client.collection('restaurants')
 
-        for restaurant in self.restaurants:
+        restaurants = self.restaurants[:]
+
+        for restaurant in restaurants:
             restaurant['created_at'] = firestore.SERVER_TIMESTAMP
             doc_ref.document(restaurant['cid']).set(restaurant)
