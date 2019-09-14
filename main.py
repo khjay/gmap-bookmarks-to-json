@@ -5,12 +5,14 @@ from bookmark import bookmark as bk
 def main():
     args = load_argvs()
 
-    db_disable = True if args.disable_db else False
-    
+    db_disable = False if args.disable_db else True
+
     bookmark = bk.Bookmark(args.path, db_disable)
     bookmark.sync_db()
 
-    print (json.dumps(bookmark.restaurants, ensure_ascii=False, indent=4))
+    print (bookmark.restaurants)
+
+    # print (json.dumps(bookmark.restaurants, ensure_ascii=False, indent=4))
 
 def load_argvs():
     parser = ArgumentParser()
