@@ -20,8 +20,8 @@ class Bookmark:
         if 'GOOGLE_APPLICATION_CREDENTIALS' not in os.environ:
             sys.exit('env: GOOGLE_APPLICATION_CREDENTIALS is invalid')
 
-        # cred = credentials.Certificate(os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
-        # firebase_admin.initialize_app(cred)
+        cred = credentials.Certificate(os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
+        firebase_admin.initialize_app(cred)
 
         return firestore.client()
 
