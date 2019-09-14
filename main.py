@@ -1,51 +1,20 @@
 import json
-import os, sys
 from argparse import ArgumentParser
+from bookmark import bookmark as bk
 
-from lxml.html import parse
+def main():
+    args = load_argvs()
+    
+    bookmark = bk.Bookmark(args.path)
+    bookmark.sync_db()
 
-import urllib.parse as urlparse
+    print (json.dumps(bookmark.restaurants, ensure_ascii=False, indent=4))
 
-import firebase_admin
-from firebase_admin import firestore
-from firebase_admin import credentials
+def load_argvs():
+    parser = ArgumentParser()
+    parser.add_argument('path', help='bookmark html file download from: https://www.google.com/bookmarks/')
 
-if 'GOOGLE_APPLICATION_CREDENTIALS' not in os.environ:
-    sys.exit('env: GOOGLE_APPLICATION_CREDENTIALS is invalid')
+    return parser.parse_args()
 
-parser = ArgumentParser()
-parser.add_argument('path', help='bookmark html file download from: https://www.google.com/bookmarks/')
-
-args = parser.parse_args()
-
-page = parse(args.path).getroot()
-
-cred = credentials.Certificate(os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
-firebase_admin.initialize_app(cred)
-
-db = firestore.client()
-doc_ref = db.collection('restaurants')
-
-restaurants = []
-
-for tag in page.xpath('//dt/a'):
-    url = tag.attrib['href']
-
-    if 'cid' not in url:
-        continue
-
-    parsed = urlparse.urlparse(url)
-    cid = urlparse.parse_qs(parsed.query)['cid'][0]
-
-    restaurant = {
-        'name': tag.text, 
-        'url': url,
-        'cid': cid,
-        'created_at': int(tag.attrib['add_date'][:-6])
-    }
-
-    restaurants.append(restaurant)
-
-    doc_ref.document(cid).set(restaurant)
-
-print (json.dumps(restaurants, ensure_ascii=False, indent=4))
+if __name__ == '__main__':
+    main()
