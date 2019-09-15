@@ -10,9 +10,7 @@ def main():
     bookmark = bk.Bookmark(args.path, db_disable)
     bookmark.sync_db()
 
-    print (bookmark.restaurants)
-
-    # print (json.dumps(bookmark.restaurants, ensure_ascii=False, indent=4))
+    print (json.dumps(bookmark.restaurants, ensure_ascii=False, indent=4))
 
 def load_argvs():
     parser = ArgumentParser()
