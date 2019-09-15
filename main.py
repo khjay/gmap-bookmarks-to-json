@@ -5,8 +5,8 @@ from bookmark import bookmark as bk
 def main():
     args = load_argvs()
 
-    db_disable = True if args.disable_db else False
-    
+    db_disable = False if args.disable_db else True
+
     bookmark = bk.Bookmark(args.path, db_disable)
     bookmark.sync_db()
 

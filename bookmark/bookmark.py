@@ -42,7 +42,7 @@ class Bookmark:
                 'name': tag.text, 
                 'url': url,
                 'cid': cid,
-                'created_at': int(tag.attrib['add_date'][:-6])
+                'add_date': int(tag.attrib['add_date'][:-6]),
             }
 
             restaurants.append(restaurant)
@@ -56,4 +56,6 @@ class Bookmark:
         doc_ref = self.db_client.collection('restaurants')
 
         for restaurant in self.restaurants:
-            doc_ref.document(restaurant['cid']).set(restaurant)
+            r = restaurant.copy()
+            r['created_at'] = firestore.SERVER_TIMESTAMP
+            doc_ref.document(restaurant['cid']).set(r)
