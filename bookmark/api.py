@@ -11,6 +11,8 @@ class GooglePlace:
         params = {'cid': cid, 'fields': self.fields, 'key': self.key}
         response = requests.get(self.HOST, params = params)
 
+        print ('fetch restaurant cid: {}'.format(cid))
+
         place = json.loads(response.text)['result']
 
         restaurant = {
@@ -21,11 +23,10 @@ class GooglePlace:
             'opening_hours': {}
         }
 
-        for period in place['opening_hours']['periods']:
-            day = period['close']['day']
-            restaurant['opening_hours'][day] = {
-                'close': period['close']['time'],
-                'open': period['open']['time']
-            }
+        # 沒有營業餐廳的時間不存該欄位
+        if 'opening_hours' not in place:
+            return restaurant
+
+        restaurant['opening_hours'] = place['opening_hours']['periods']
 
         return restaurant

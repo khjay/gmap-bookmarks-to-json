@@ -31,6 +31,8 @@ class Bookmark:
         restaurants = []
         page = parse(self.path).getroot()
 
+        place = api.GooglePlace()
+
         for tag in page.xpath('//dt/a'):
             url = tag.attrib['href']
 
@@ -40,7 +42,6 @@ class Bookmark:
             parsed = urlparse.urlparse(url)
             cid = urlparse.parse_qs(parsed.query)['cid'][0]
 
-            place = api.GooglePlace()
             restaurant = place.find(cid)
 
             restaurants.append(restaurant)
@@ -58,3 +59,5 @@ class Bookmark:
             r['created_at'] = firestore.SERVER_TIMESTAMP
             r['opening_hours'] = str(r['opening_hours'])
             doc_ref.document(restaurant['cid']).set(r)
+
+            print ('synced restaurant cid: {}'.format(restaurant['cid']))
