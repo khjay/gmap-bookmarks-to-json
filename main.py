@@ -1,6 +1,8 @@
-import json
+import json, os
 from argparse import ArgumentParser
 from bookmark import bookmark as bk
+
+from dotenv import load_dotenv
 
 def main():
     args = load_argvs()
@@ -20,4 +22,7 @@ def load_argvs():
     return parser.parse_args()
 
 if __name__ == '__main__':
+    load_dotenv()
+
     main()
+
