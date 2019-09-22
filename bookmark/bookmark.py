@@ -8,6 +8,8 @@ import firebase_admin
 from firebase_admin import firestore
 from firebase_admin import credentials
 
+from . import api
+
 class Bookmark:
     def __init__(self, path, disable_firestore = False):
         self.path = path
@@ -38,12 +40,8 @@ class Bookmark:
             parsed = urlparse.urlparse(url)
             cid = urlparse.parse_qs(parsed.query)['cid'][0]
 
-            restaurant = {
-                'name': tag.text, 
-                'url': url,
-                'cid': cid,
-                'add_date': int(tag.attrib['add_date'][:-6]),
-            }
+            place = api.GooglePlace()
+            restaurant = place.find(cid)
 
             restaurants.append(restaurant)
 
@@ -58,4 +56,5 @@ class Bookmark:
         for restaurant in self.restaurants:
             r = restaurant.copy()
             r['created_at'] = firestore.SERVER_TIMESTAMP
+            r['opening_hours'] = str(r['opening_hours'])
             doc_ref.document(restaurant['cid']).set(r)
